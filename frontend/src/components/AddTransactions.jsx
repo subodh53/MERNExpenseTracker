@@ -17,26 +17,28 @@ const AddTransactions = ({ onAdd }) => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if(!form.category || !form.amount) return;
-
-        const newTransaction = {
-            ...form,
-            id: Date.now(),
-            amount: Number(form.amount)
-        };
-
-        onAdd(newTransaction);
-
-        setForm({
-            type: "expense",
-            category: "",
-            amount: "",
-            date: "",
-            note: ""
-        });
+        try {
+            const res = await fetch('http://localhost:5000/api/v1/transactions/addTransaction', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(form),
+            });
+            const data = await res.json();
+            onAdd(data);
+            setForm({
+                type: "expense",
+                category: "",
+                amount: "",
+                date: "",
+                note: ""
+            });
+        } catch (error) {
+            console.error("Error adding transaction: ", error);
+        }
     };
 
   return (
