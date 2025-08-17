@@ -22,8 +22,7 @@ function App() {
   }, []);
 
   const addTransactions = (tx) => {
-    console.log(tx);
-    setTransactions([tx, ...transactions]);
+    setTransactions((prev) => [tx, ...transactions]);
   };
 
   return (
